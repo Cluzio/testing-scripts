@@ -1,1 +1,49 @@
-print("lol")
+local colorsUI = {
+	SchemeColor = Color3.fromRGB(104, 104, 104),
+	Background = Color3.fromRGB(0, 0, 0),
+	Header = Color3.fromRGB(0, 0, 0),
+	TextColor = Color3.fromRGB(255, 255, 255),
+	ElementColor = Color3.fromRGB(0, 0, 0)
+}
+
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Bedwars", colorsUI)
+
+-- LocalPlayer
+local Tab = Window:NewTab("LocalPlayer") -- Tab
+local Player = Tab:NewSection("Player") -- Section
+local Keybinds = Tab:NewSection("Keybinds") -- KeybindsSection
+
+Player:NewSlider("WalkSpeed", "Increases your walk speed", 120, 2, function(s) -- Walk Speed
+	game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = s
+end)
+
+Player:NewSlider("JumpPower", "Increases your jump power, Broken", 300, 5, function(s) -- Jump Power
+	game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = s
+end)
+
+Keybinds:NewKeybind("Buy Wool with key", "Buys wool if you press a certain key", Enum.KeyCode.T, function()
+	local A_1 = 
+		{
+			["shopItem"] = 
+			{
+				["price"] = 8, 
+				["currency"] = "iron", 
+				["itemType"] = "wool_white", 
+				["amount"] = 16
+			}
+		}
+	local Event = game:GetService("ReplicatedStorage")["rbxts_include"]["node_modules"].net.out["_NetManaged"].BedwarsPurchaseItem
+	Event:InvokeServer(A_1)
+end)
+
+Keybinds:NewKeybind("Close UI", "Closes UI if you press a certain key", Enum.KeyCode.RightShift, function()
+	for i,v in pairs(game.CoreGui:GetDescendants()) do
+		if v:IsA("Frame") then
+			if v:FindFirstChild("Main") then
+				v.Parent:Destroy()
+			end
+		end
+	end
+end)
